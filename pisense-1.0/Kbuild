@@ -1,6 +1,7 @@
-obj-m := rpisense-fb.o rpisense-js.o
+obj-m += drivers/video/fbdev/rpisense-fb.o 
+lbj-m += drivers/inputs/joystick/rpisense-js.o
 
-rpisense-fb-y := drivers/video/fbdev/rpisense-fb.c
-rpisense-js-y := drivers/input/joystick/rpisense-js.c
+#rpisense-fb-y := drivers/video/fbdev/rpisense-fb.c
+#rpisense-js-y := drivers/input/joystick/rpisense-js.c
 
 ccflags-y := -I$(src)/include
