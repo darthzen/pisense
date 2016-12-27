@@ -4,7 +4,7 @@ Name:			pisense
 BuildRequires:	%kernel_module_package_buildreqs 
 License:		GPL 
 Group:			System/Kernel 
-Summary:		Sample Driver 
+Summary:		Raspberry Pi Sense-Hat
 Version:		1.0 
 Release:		0 
 Source0:		%name-%version.tar.bz2 
@@ -37,5 +37,5 @@ for flavor in %flavors_to_build; do
 done
 
 %changelog
-Tue Dec 13 2016 – rick.ashford@suse.com
+* Tue Dec 13 2016 – rick.ashford@suse.com
 - Initial version.
