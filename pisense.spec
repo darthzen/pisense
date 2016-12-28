@@ -1,4 +1,3 @@
-#norootforbuild 
 
 Name:			pisense
 BuildRequires:	%kernel_module_package_buildreqs 
@@ -37,5 +36,3 @@ for flavor in %flavors_to_build; do
 done
 
 %changelog
-* Tue Dec 13 2016 – rick.ashford@suse.com
-- Initial version.
