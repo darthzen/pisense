@@ -32,14 +32,13 @@ cd source
 mkdir -p src/%{dts_rpi_overlay_dir}
 mv -fv rpi-sense-overlay.dts src/%{dts_rpi_overlay_dir}/
 
-patch src/%{dts_makefile} rpisense-overlay-makefile.patch
-
 cd ..
 
 %build 
 for flavor in %flavors_to_build; do 
         rm -rf obj/$flavor 
         cp -r source obj/$flavor 
+        patch %{kernel_source $flavor}/%{dts_makefile} obj/$flavor/rpisense-overlay-makefile.patch
         make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor 
         make -C %{kernel_source $flavor} dtbs
 done 
