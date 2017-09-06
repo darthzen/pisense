@@ -1,54 +1,57 @@
-#
-# spec file for package pisense
-#
-# Copyright (c) 2016 Richard Ashford, Peter Linnell
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
+#norootforbuild 
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
+%define dts_overlay_dir arch/arm64/boot/dts
+%define dts_rpi_overlay rpi-overlays
+%define dts_rpi_overlay_dir %{dts_overlay_dir}/%{dts_rpi_overlay}
+%define dts_makefile %{dts_overlay_dir}/Makefile
+
 Name:			pisense
-License:		GPL-2.0 
+BuildRequires:	%kernel_module_package_buildreqs 
+License:		GPL 
 Group:			System/Kernel 
-Summary:		Raspberry Pi Sense-Hat Drivers
+Summary:		Raspberry Pi Sense-Hat drivers 
 Version:		1.0 
 Release:		0 
-Source0:		%name-%version.tar.bz2 
+Source0:		%name-%version.tar.xz
 BuildRoot:		%{_tmppath}/%{name}-%{version}-build
-URL: 			https://github.com/darthzen/pisense
-BuildRequires:	%kernel_module_package_buildreqs 
 
 %kernel_module_package
 
 %description 
-This package contains the Raspberry Pi Sense-Hat drivers. 
+This package contains the Raspberry Pi Sense-Hat drivers
 
 %prep 
 %setup 
 set -- * 
 mkdir source 
 mv "$@" source/ 
-mkdir obj 
+mkdir obj/
+
+cd source
+
+mkdir -p src/%{dts_rpi_overlay_dir}
+mv -fv rpi-sense-overlay.dts src/%{dts_rpi_overlay_dir}/
+
+patch src/%{dts_makefile} pisense-overlay-makefile.patch
+
+cd ..
 
 %build 
 for flavor in %flavors_to_build; do 
         rm -rf obj/$flavor 
         cp -r source obj/$flavor 
         make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor 
+        make -C %{kernel_source $flavor} dtbs
 done 
 
 %install 
-export INSTALL_MOD_PATH=%{buildroot}
+export INSTALL_MOD_PATH=$RPM_BUILD_ROOT 
 export INSTALL_MOD_DIR=updates 
 for flavor in %flavors_to_build; do 
         make -C %{kernel_source $flavor} modules_install M=$PWD/obj/$flavor 
+        make -C %{kernel_source $flavor} dtbs_install
 done
 
 %changelog
+* Tue Dec 13 2016 – rick.ashford@suse.com
+- Initial version.
