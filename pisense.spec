@@ -7,6 +7,7 @@
 
 Name:			pisense
 BuildRequires:	%kernel_module_package_buildreqs 
+BuildRequires:  kernel-source
 License:		GPL 
 Group:			System/Kernel 
 Summary:		Raspberry Pi Sense-Hat drivers 
