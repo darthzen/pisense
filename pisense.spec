@@ -35,16 +35,19 @@ mv -fv rpi-sense-overlay.dts src/%{dts_rpi_overlay_dir}/
 
 cd ..
 
+export SOURCE_VER=`rpm -qa |grep kernel-source |sed -E 's/kernel-source-([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)\.([0-9]+)\.noarch/\1.\2.\3-\4/g'`
+export SOURCE_DIR="/usr/src/${SOURCE_VER}"
+
+if [ -f ${SOURCE_DIR}/%{dts_makefile} ] ; then
+    patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
+fi
+
 %build 
 for flavor in %flavors_to_build; do 
         rm -rf obj/$flavor 
         cp -r source obj/$flavor 
-        find /usr/src/ -name "*"
-        if [ -f %{kernel_source $flavor}/%{dts_makefile} ] ; then
-            patch %{kernel_source $flavor}/%{dts_makefile} obj/$flavor/rpisense-overlay-makefile.patch
-        fi
         make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor 
-        make -C %{kernel_source $flavor} dtbs
+        make -C ${SOURCE_DIR} dtbs
 done 
 
 %install 
