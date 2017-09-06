@@ -32,7 +32,7 @@ cd source
 mkdir -p src/%{dts_rpi_overlay_dir}
 mv -fv rpi-sense-overlay.dts src/%{dts_rpi_overlay_dir}/
 
-patch src/%{dts_makefile} pisense-overlay-makefile.patch
+patch src/%{dts_makefile} rpisense-overlay-makefile.patch
 
 cd ..
 

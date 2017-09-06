@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                osc service remoterun home:darthzen pisense
+                osc -v service remoterun home:darthzen pisense
             }
         }
     }
