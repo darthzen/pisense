@@ -38,7 +38,7 @@ cd ..
 for flavor in %flavors_to_build; do 
         rm -rf obj/$flavor 
         cp -r source obj/$flavor 
-        ls -lha %{kernel_source $flavor}/arch/
+        ls -lha %{kernel_source $flavor}/%{dts_overlay_dir}
         if [ -f %{kernel_source $flavor}/%{dts_makefile} ] ; then
             patch %{kernel_source $flavor}/%{dts_makefile} obj/$flavor/rpisense-overlay-makefile.patch
         fi
