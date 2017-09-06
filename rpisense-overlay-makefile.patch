@@ -1,0 +1,10 @@
+--- arch/arm64/boot/dts/Makefile	2017-09-06 09:29:30.882793020 -0500
++++ Makefile	2017-09-06 09:30:17.459103430 -0500
+@@ -15,6 +15,7 @@
+ dts-dirs += nvidia
+ dts-dirs += qcom
+ dts-dirs += renesas
++dts-dirs += rpisense-overlay
+ dts-dirs += rockchip
+ dts-dirs += socionext
+ dts-dirs += sprd
