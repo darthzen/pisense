@@ -28,12 +28,8 @@ mkdir source
 mv "$@" source/ 
 mkdir obj/
 
-cd source
-
-mkdir -p src/%{dts_rpi_overlay_dir}
-mv -fv rpi-sense-overlay.dts src/%{dts_rpi_overlay_dir}/
-
-cd ..
+mkdir -p source/src/%{dts_rpi_overlay_dir}
+mv -fv source/rpi-sense-overlay.dts source/src/%{dts_rpi_overlay_dir}/
 
 export SOURCE_VER=`rpm -qa |grep kernel-source |sed -E 's/kernel-source-([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)\.([0-9]+)\.noarch/\1.\2.\3-\4/g'`
 export SOURCE_DIR="${PWD}/linux-${SOURCE_VER}/"
@@ -44,7 +40,7 @@ if [ -f ${SOURCE_DIR}/%{dts_makefile} ] ; then
     patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
 fi
 
-mv -fv src %{name}-%{version}
+mv -fv source/src source/%{name}-%{version}
 
 %build 
 for flavor in %flavors_to_build; do 
