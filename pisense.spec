@@ -39,8 +39,7 @@ export SOURCE_VER=`rpm -qa |grep kernel-source |sed -E 's/kernel-source-([0-9]+)
 export SOURCE_DIR="/usr/src/linux-${SOURCE_VER}/"
 
 if [ -f ${SOURCE_DIR}/%{dts_makefile} ] ; then
-    whoami
-    patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
+    sudo patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
 fi
 
 mv -fv src %{name}-%{version}
@@ -54,11 +53,14 @@ for flavor in %flavors_to_build; do
 done 
 
 %install 
-export INSTALL_MOD_PATH=$RPM_BUILD_ROOT 
+export INSTALL_MOD_PATH="$RPM_BUILD_ROOT" 
 export INSTALL_MOD_DIR=updates 
+export INSTALL_DTBS_PATH="$RPM_BUILD_ROOT/boot/dtb-${SOURCE_VER}"
+mkdir -p $RPM_BUILD_ROOT/boot/dtb-${SOURCE_VER}
+make -C ${SOURCE_DIR} dtbs_install
+
 for flavor in %flavors_to_build; do 
         make -C %{kernel_source $flavor} modules_install M=$PWD/obj/$flavor 
-        make -C %{kernel_source $flavor} dtbs_install
 done
 
 %changelog
