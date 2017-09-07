@@ -41,7 +41,7 @@ export SOURCE_DIR="${PWD}/linux-${SOURCE_VER}/"
 cp -Rf --no-preserve=ownership /usr/src/linux-${SOURCE_VER} ./
 
 if [ -f ${SOURCE_DIR}/%{dts_makefile} ] ; then
-    sudo patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
+    patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
 fi
 
 mv -fv src %{name}-%{version}
