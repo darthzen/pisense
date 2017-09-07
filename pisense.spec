@@ -39,6 +39,7 @@ export SOURCE_VER=`rpm -qa |grep kernel-source |sed -E 's/kernel-source-([0-9]+)
 export SOURCE_DIR="/usr/src/linux-${SOURCE_VER}/"
 
 if [ -f ${SOURCE_DIR}/%{dts_makefile} ] ; then
+    whoami
     patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
 fi
 
