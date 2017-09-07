@@ -1,0 +1,21 @@
+#!/bin/bash
+
+FILES="`find src/ -name "*" -type f`"
+for BRANCH in `curl -s https://api.github.com/repos/raspberrypi/linux/branches | grep -Eo 'rpi-([0-9\.]+)\.y'` ; do
+    echo $BRANCH
+    if (( $(echo "`echo ${BRANCH} | sed -E 's/rpi-((.*)+)\.y/\1/'` >= 4.4" | bc -l) )); then
+        echo "Evaluating branch: ${BRANCH}"
+        for FILE in ${FILES} ; do
+            if [[ ${FILE} =~ "include" || ${FILE} =~ "drivers" ]] ; then
+                FILENAME=`echo ${FILE} | sed -E 's/(.*)+\///'`
+                echo "    Checking ${FILENAME}"
+                DIFF=`wget -qO- https://raw.githubusercontent.com/raspberrypi/linux/${BRANCH}/\`echo ${FILE} | sed 's/src\///'\` | diff ${FILE} -`
+                if [[ ! -z "${DIFF}" ]]; then
+                    mkdir -p diff/${BRANCH}
+                    echo "      Diff found - generating patch for ${FILENAME}"
+                    echo "${DIFF}" > diff/${BRANCH}/${FILENAME}_${BRANCH}.patch
+                fi
+            fi
+        done
+    fi
+done

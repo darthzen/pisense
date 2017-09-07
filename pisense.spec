@@ -36,7 +36,9 @@ mv -fv rpi-sense-overlay.dts src/%{dts_rpi_overlay_dir}/
 cd ..
 
 export SOURCE_VER=`rpm -qa |grep kernel-source |sed -E 's/kernel-source-([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)\.([0-9]+)\.noarch/\1.\2.\3-\4/g'`
-export SOURCE_DIR="/usr/src/linux-${SOURCE_VER}/"
+export SOURCE_DIR="${PWD}/linux-${SOURCE_VER}/"
+
+cp -Rf --no-preserve=ownership /usr/src/linux-${SOURCE_VER} ./
 
 if [ -f ${SOURCE_DIR}/%{dts_makefile} ] ; then
     sudo patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
