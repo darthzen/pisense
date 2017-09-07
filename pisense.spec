@@ -42,6 +42,8 @@ if [ -f ${SOURCE_DIR}/%{dts_makefile} ] ; then
     patch ${SOURCE_DIR}/%{dts_makefile} source/rpisense-overlay-makefile.patch
 fi
 
+mv -fv src %{name}-%{version}
+
 %build 
 for flavor in %flavors_to_build; do 
         rm -rf obj/$flavor 
