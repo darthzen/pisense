@@ -47,7 +47,9 @@ for flavor in %flavors_to_build; do
         rm -rf obj/$flavor 
         cp -r source obj/$flavor 
         make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor 
-        make -C ${SOURCE_DIR} dtbs
+        if [ $flavor == "default" ] ; then
+            make -C ${SOURCE_DIR} dtbs
+        fi
 done 
 
 %install 
