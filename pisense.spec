@@ -44,12 +44,10 @@ mv -fv source/src source/%{name}-%{version}
 
 %build 
 for flavor in %flavors_to_build; do 
-        if [ $flavor == "default" ] ; then
             rm -rf obj/$flavor 
             cp -r source obj/$flavor 
             make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor 
-            make -C ${SOURCE_DIR} dtbs
-        fi
+#            make -C ${SOURCE_DIR} dtbs
 done 
 
 %install 
@@ -57,7 +55,7 @@ export INSTALL_MOD_PATH="$RPM_BUILD_ROOT"
 export INSTALL_MOD_DIR=updates 
 export INSTALL_DTBS_PATH="$RPM_BUILD_ROOT/boot/dtb-${SOURCE_VER}"
 mkdir -p $RPM_BUILD_ROOT/boot/dtb-${SOURCE_VER}
-make -C ${SOURCE_DIR} dtbs_install
+#make -C ${SOURCE_DIR} dtbs_install
 
 for flavor in %flavors_to_build; do 
         make -C %{kernel_source $flavor} modules_install M=$PWD/obj/$flavor 
