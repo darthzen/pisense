@@ -44,10 +44,10 @@ mv -fv source/src source/%{name}-%{version}
 
 %build 
 for flavor in %flavors_to_build; do 
-        rm -rf obj/$flavor 
-        cp -r source obj/$flavor 
-        make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor 
         if [ $flavor == "default" ] ; then
+            rm -rf obj/$flavor 
+            cp -r source obj/$flavor 
+            make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor 
             make -C ${SOURCE_DIR} dtbs
         fi
 done 
